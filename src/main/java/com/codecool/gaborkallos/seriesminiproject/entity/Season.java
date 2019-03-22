@@ -17,6 +17,7 @@ public class Season {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private Integer seasonNumber;
 
     @ManyToOne
@@ -27,4 +28,8 @@ public class Season {
     @EqualsAndHashCode.Exclude
     private Set<Episode> episodes;
 
+    public Season(Integer seasonNumber, Series series) {
+        this.seasonNumber = seasonNumber;
+        this.series = series;
+    }
 }

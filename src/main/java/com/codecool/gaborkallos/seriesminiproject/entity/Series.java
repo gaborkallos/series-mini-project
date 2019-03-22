@@ -16,6 +16,7 @@ public class Series {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Singular
@@ -23,4 +24,7 @@ public class Series {
     @EqualsAndHashCode.Exclude
     private Set<Season> seasons;
 
+    public Series(String title) {
+        this.title = title;
+    }
 }

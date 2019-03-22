@@ -19,18 +19,22 @@ import java.time.LocalDate;
 @SpringBootApplication
 public class SeriesMiniProjectApplication {
 
-    @Autowired
-    private SeriesRepository seriesRepository;
+    private final SeriesRepository seriesRepository;
 
-    @Autowired
-    private SeasonRepository seasonRepository;
+    private final SeasonRepository seasonRepository;
 
-    @Autowired
-    private EpisodeRepository episodeRepository;
+    private final EpisodeRepository episodeRepository;
 
     private Series series;
     private Season season;
     private Episode episode;
+
+    @Autowired
+    public SeriesMiniProjectApplication(SeriesRepository seriesRepository, SeasonRepository seasonRepository, EpisodeRepository episodeRepository) {
+        this.seriesRepository = seriesRepository;
+        this.seasonRepository = seasonRepository;
+        this.episodeRepository = episodeRepository;
+    }
 
 
     public static void main(String[] args) {
@@ -46,11 +50,11 @@ public class SeriesMiniProjectApplication {
             seriesRepository.save(series);
             season = getSeason(series, 1);
             seasonRepository.save(season);
-            episode = getEpisode(season, "Winter is coming", "1:02:00", 2011, 04, 17);
+            episode = getEpisode(season, "Winter is coming", "1:02:00", 2011, 4, 17);
             episodeRepository.save(episode);
-            episode = getEpisode(season, "The Kingsroad", "0:56:00", 2011, 04, 25);
+            episode = getEpisode(season, "The Kingsroad", "0:56:00", 2011, 4, 25);
             episodeRepository.save(episode);
-            episode = getEpisode(season, "Lord Snow", "0:58:00", 2011, 05, 02);
+            episode = getEpisode(season, "Lord Snow", "0:58:00", 2011, 5, 2);
             episodeRepository.save(episode);
 
             series = getSeries("Criminal Minds");
@@ -61,6 +65,8 @@ public class SeriesMiniProjectApplication {
             seasonRepository.save(season);
             season = getSeason(series, 3);
             seasonRepository.save(season);
+            episode = getEpisode(season, "Extreme Aggressor", "0:42:00", 20606, 3, 17);
+            episodeRepository.save(episode);
 
 
         };
@@ -87,7 +93,6 @@ public class SeriesMiniProjectApplication {
         return Series.builder()
                 .title(title)
                 .build();
-
     }
 
 }
