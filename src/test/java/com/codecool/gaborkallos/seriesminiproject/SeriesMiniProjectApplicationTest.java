@@ -69,7 +69,7 @@ public class SeriesMiniProjectApplicationTest {
     }
 
     @Test
-    public void givenSeriesRepository_whenSaveAndReceiveEntity_thenOK() {
+    public void givenSeriesRepositorySaveAndReceiveEntity() {
         Series genericSeries = seriesRepository.save(
                 new Series("TEST"));
         Series foundSeries = seriesRepository.getOne(
@@ -80,7 +80,7 @@ public class SeriesMiniProjectApplicationTest {
     }
 
     @Test
-    public void givenSeasonRepository_whenSaveAndReceiveEntity_thenOK() {
+    public void givenSeasonRepositorySaveAndReceiveEntity() {
         Series genericSeries = seriesRepository.save(
                 new Series("TEST"));
         Season genericSeason = seasonRepository.save(
@@ -93,7 +93,7 @@ public class SeriesMiniProjectApplicationTest {
     }
 
     @Test
-    public void givenEpisodeRepository_whenSaveAndReceiveEntity_thenOK() {
+    public void givenEpisodeRepositorySaveAndReceiveEntity() {
         Series genericSeries = seriesRepository.save(
                 new Series("Test Series"));
         Season genericSeason = seasonRepository.save(
@@ -114,12 +114,12 @@ public class SeriesMiniProjectApplicationTest {
     @Test(expected = DataIntegrityViolationException.class)
     public void saveUniqueTitleFieldTwiceToSeries() {
         Series firstTestSeries = Series.builder()
-                .title("UNIQUE TEST SERIES")
+                .title("UNIQUE SERIES TEST")
                 .build();
         seriesRepository.save(firstTestSeries);
 
         Series secondTestSeries = Series.builder()
-                .title("UNIQUE TEST SERIES")
+                .title("UNIQUE SERIES TEST")
                 .build();
         seriesRepository.saveAndFlush(secondTestSeries);
     }
@@ -127,54 +127,51 @@ public class SeriesMiniProjectApplicationTest {
     @Test(expected = DataIntegrityViolationException.class)
     public void saveUniqueSeasonNumberFieldTwiceToSeason() {
         Series testSeries = Series.builder()
-                .title("UNIQUE TEST SERIES-SEASON")
+                .title("UNIQUE SERIES-SEASON TEST")
                 .build();
-
-        Season firstTestSeason = Season.builder()
-                .seasonNumber(1)
-                .series(testSeries)
-                .build();
-
-        Season secondTestSeason = Season.builder()
-                .seasonNumber(1)
-                .series(testSeries)
-                .build();
-
         seriesRepository.save(testSeries);
-        seasonRepository.save(firstTestSeason);
-        seasonRepository.saveAndFlush(secondTestSeason);
-    }
-
-    @Test(expected = DataIntegrityViolationException.class)
-    public void saveUniqueTitleFieldTwiceToEpisode() {
-        Series testSeries = Series.builder()
-                .title("UNIQUE TEST SERIES-EPISODE")
-                .build();
 
         Season testSeason = Season.builder()
                 .seasonNumber(1)
                 .series(testSeries)
                 .build();
-
-        Episode firstEpisodeTest = Episode.builder()
-                .title("UNIQUE EPISODE TEST IS COMMING")
-                .build();
-
-        Episode secondEpisodeTest = Episode.builder()
-                .title("UNIQUE EPISODE TEST IS COMMING")
-                .build();
-
-        seriesRepository.save(testSeries);
         seasonRepository.save(testSeason);
-        episodeRepository.save(firstEpisodeTest);
-        episodeRepository.saveAndFlush(secondEpisodeTest);
+
+        testSeason = Season.builder()
+                .seasonNumber(1)
+                .series(testSeries)
+                .build();
+        seasonRepository.saveAndFlush(testSeason);
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void saveUniqueTitleFieldTwiceToEpisode() {
+        Series testSeries = Series.builder()
+                .title("UNIQUE SERIES-EPISODE TEST")
+                .build();
+        seriesRepository.save(testSeries);
+
+        Season testSeason = Season.builder()
+                .seasonNumber(1)
+                .series(testSeries)
+                .build();
+        seasonRepository.save(testSeason);
+
+        Episode testEpisode = Episode.builder()
+                .title("UNIQUE EPISODE TEST")
+                .build();
+        episodeRepository.save(testEpisode);
+
+        testEpisode = Episode.builder()
+                .title("UNIQUE EPISODE TEST")
+                .build();
+        episodeRepository.saveAndFlush(testEpisode);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void seriesTitleShouldBeNotNull() {
         Series series = Series.builder()
                 .build();
-
         seriesRepository.save(series);
     }
 
@@ -187,7 +184,6 @@ public class SeriesMiniProjectApplicationTest {
         Season season = Season.builder()
                 .series(series)
                 .build();
-
         seriesRepository.save(series);
         seasonRepository.save(season);
     }
